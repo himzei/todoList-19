@@ -5,27 +5,24 @@ const message = document.querySelector("#message");
 
 let todos = [];
 
-todoForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  const text = todoInput.value;
-
-  const newTodo = {
-    id: Date.now().toString() + "-" + Math.random().toString(36).slice(2, 8),
-    text: text,
-    completed: false,
-  };
-
-  todos.push(newTodo);
-  todoInput.value = "";
-  console.log(todos);
-
-  saveTodos();
-  renderTodos();
-});
-
 function loadTodos() {
-  const savedTodos = localStorage.getItem("daily-note");
-  todos = JSON.parse(savedTodos);
+  try {
+    const savedTodos = localStorage.getItem("daily-note");
+    if (savedTodos !== null) {
+      todos = JSON.parse(savedTodos);
+    }
+  } catch (error) {
+    console.log("error");
+  }
+}
+
+function saveTodos() {
+  try {
+    localStorage.setItem("daily-note", JSON.stringify(todos));
+  } catch (error) {
+    message.textContent =
+      "저장되지 않았습니다. 새로고침하여 다지 시도해 주세요";
+  }
 }
 
 function renderTodos() {
@@ -60,16 +57,23 @@ function renderTodos() {
   });
 }
 
-function saveTodos() {
-  try {
-    localStorage.setItem("daily-note", JSON.stringify(todos));
-  } catch (error) {
-    message.textContent =
-      "저장되지 않았습니다. 새로고침하여 다지 시도해 주세요";
-  }
-}
+todoForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const text = todoInput.value;
+
+  const newTodo = {
+    id: Date.now().toString() + "-" + Math.random().toString(36).slice(2, 8),
+    text: text,
+    completed: false,
+  };
+
+  todos.push(newTodo);
+  todoInput.value = "";
+  console.log(todos);
+
+  saveTodos();
+  renderTodos();
+});
 
 loadTodos();
 renderTodos();
-
-// console.log(todos);
