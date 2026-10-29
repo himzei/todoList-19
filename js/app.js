@@ -35,6 +35,12 @@ function renderTodos() {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "todo-checkbox";
+    checkbox.checked = todo.completed;
+    checkbox.addEventListener("change", function () {
+      todo.completed = checkbox.checked;
+      saveTodos();
+      renderTodos();
+    });
 
     const text = document.createElement("span");
     text.className = "todo-text";
@@ -49,12 +55,23 @@ function renderTodos() {
     deleteButton.type = "button";
     deleteButton.className = "text-button delete-button";
     deleteButton.textContent = "삭제";
+    deleteButton.addEventListener("click", function () {
+      deleteTodo(todo.id);
+    });
 
     item.append(checkbox, text, editButton, deleteButton);
     todoList.append(item);
     // <li class="todo-item"></li>
     // <input type="checkbox" class="todo-checkbox" />
   });
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(function (todo) {
+    return todo.id !== id;
+  });
+  saveTodos();
+  renderTodos();
 }
 
 todoForm.addEventListener("submit", function (event) {
