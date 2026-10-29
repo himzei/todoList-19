@@ -20,6 +20,16 @@ todoForm.addEventListener("submit", function (event) {
   console.log(todos);
 
   saveTodos();
+  renderTodos();
+});
+
+function loadTodos() {
+  const savedTodos = localStorage.getItem("daily-note");
+  todos = JSON.parse(savedTodos);
+}
+
+function renderTodos() {
+  todoList.replaceChildren();
 
   todos.forEach(function (todo) {
     const item = document.createElement("li");
@@ -48,7 +58,7 @@ todoForm.addEventListener("submit", function (event) {
     // <li class="todo-item"></li>
     // <input type="checkbox" class="todo-checkbox" />
   });
-});
+}
 
 function saveTodos() {
   try {
@@ -58,3 +68,8 @@ function saveTodos() {
       "저장되지 않았습니다. 새로고침하여 다지 시도해 주세요";
   }
 }
+
+loadTodos();
+renderTodos();
+
+// console.log(todos);
